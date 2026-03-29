@@ -762,6 +762,7 @@ function StudentProfile({ profile, onNavigate, refreshAll, requests, directionMo
                   <th>博士单独汇报</th>
                   <th>博士大组会</th>
                   <th>硕士年级会议</th>
+                  <th>硕士大组会</th>
                   <th>方向小组会</th>
                 </tr>
               </thead>
@@ -771,6 +772,7 @@ function StudentProfile({ profile, onNavigate, refreshAll, requests, directionMo
                   <td>自己申请</td>
                   <td>看通知；博士负责人需组织</td>
                   <td>✕</td>
+                  <td>✕</td>
                   <td>默认显示；被登记参会后为已完成</td>
                 </tr>
                 <tr>
@@ -778,12 +780,14 @@ function StudentProfile({ profile, onNavigate, refreshAll, requests, directionMo
                   <td>可主动申请</td>
                   <td>看通知；博士负责人需组织</td>
                   <td>✕</td>
+                  <td>✕</td>
                   <td>默认显示；被登记参会后为已完成</td>
                 </tr>
                 <tr>
                   <td>硕士</td>
                   <td>✕</td>
-                  <td>自己可申请</td>
+                  <td>✕</td>
+                  <td>自己可申请发起</td>
                   <td>看通知；硕士负责人需组织</td>
                   <td>默认显示；被登记参会后为已完成</td>
                 </tr>
@@ -792,17 +796,20 @@ function StudentProfile({ profile, onNavigate, refreshAll, requests, directionMo
                   <td>自己申请</td>
                   <td>负责发起 / 组织</td>
                   <td>✕</td>
+                  <td>✕</td>
                   <td>若同时是方向负责人，可登记完成</td>
                 </tr>
                 <tr>
                   <td>硕士负责人</td>
                   <td>✕</td>
-                  <td>自己可申请</td>
+                  <td>✕</td>
+                  <td>自己可申请发起</td>
                   <td>负责发起 / 组织</td>
                   <td>若同时是方向负责人，可登记完成</td>
                 </tr>
                 <tr>
                   <td>方向小组负责人</td>
+                  <td>按本人身份判断</td>
                   <td>按本人身份判断</td>
                   <td>按本人身份判断</td>
                   <td>按本人身份判断</td>
