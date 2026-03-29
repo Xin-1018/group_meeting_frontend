@@ -23,7 +23,7 @@ const TYPE_LABELS: Record<string, string> = {
   phd_one_on_one: '博士单独汇报',
   master_grade_meeting: '硕士年级会议',
   phd_group_meeting: '博士大组会',
-  master_group_meeting: '方向小组会',
+  master_group_meeting: '硕士大组会',
 }
 
 const BLOCK_LABELS: Record<string, string> = {
@@ -305,18 +305,26 @@ function buildStudentTasks(profile: any, requests: any[], directionMonthComplete
   }
 
   if (profile?.role === 'master') {
-    tasks.push({
-      key: 'master_grade_meeting',
-      title: '硕士年级会议',
-      tone: profile?.is_group_leader && profile?.leader_scope === 'master'
-        ? lifecycleForApplicant(requests, 'master_grade_meeting').tone
-        : 'green',
-      value: profile?.is_group_leader && profile?.leader_scope === 'master'
-        ? lifecycleForApplicant(requests, 'master_grade_meeting').label
-        : '待安排',
-      clickable: !!(profile?.is_group_leader && profile?.leader_scope === 'master'),
-    })
-  }
+  tasks.push({
+    key: 'master_grade_meeting',
+    title: '硕士年级会议',
+    tone: lifecycleForApplicant(requests, 'master_grade_meeting').tone,
+    value: lifecycleForApplicant(requests, 'master_grade_meeting').label,
+    clickable: true,
+  })
+
+  tasks.push({
+    key: 'master_group_meeting',
+    title: '硕士大组会',
+    tone: profile?.is_group_leader && profile?.leader_scope === 'master'
+      ? lifecycleForApplicant(requests, 'master_group_meeting').tone
+      : 'indigo',
+    value: profile?.is_group_leader && profile?.leader_scope === 'master'
+      ? lifecycleForApplicant(requests, 'master_group_meeting').label
+      : '待安排',
+    clickable: !!(profile?.is_group_leader && profile?.leader_scope === 'master'),
+  })
+}
 
   tasks.push({
     key: 'direction_group',
@@ -486,13 +494,26 @@ function StudentApply({ profile, participants, onNavigate, refreshAll }: any) {
   const [msg, setMsg] = useState('')
 
   const allowedMeetingTypes = useMemo(() => {
-    const list: string[] = []
-    if (profile?.role === 'phd' && profile?.effective_need_one_on_one) list.push('phd_one_on_one')
-    if (profile?.role === 'phd' && profile?.is_group_leader && profile?.leader_scope === 'phd') list.push('phd_group_meeting')
-    if (profile?.role === 'master' && profile?.is_group_leader && profile?.leader_scope === 'master') list.push('master_grade_meeting')
-    if (profile?.is_group_leader && profile?.leader_scope === 'direction_group') list.push('master_group_meeting')
-    return list.length ? list : profile?.role === 'phd' ? ['phd_one_on_one'] : ['master_grade_meeting']
-  }, [profile])
+  const list: string[] = []
+
+  if (profile?.role === 'phd' && profile?.effective_need_one_on_one) {
+    list.push('phd_one_on_one')
+  }
+
+  if (profile?.role === 'phd' && profile?.is_group_leader && profile?.leader_scope === 'phd') {
+    list.push('phd_group_meeting')
+  }
+
+  if (profile?.role === 'master') {
+    list.push('master_grade_meeting')
+  }
+
+  if (profile?.role === 'master' && profile?.is_group_leader && profile?.leader_scope === 'master') {
+    list.push('master_group_meeting')
+  }
+
+  return list
+}, [profile])
 
   useEffect(() => {
     if (!meetingType && allowedMeetingTypes.length) setMeetingType(allowedMeetingTypes[0])
@@ -762,7 +783,7 @@ function StudentProfile({ profile, onNavigate, refreshAll, requests, directionMo
                 <tr>
                   <td>硕士</td>
                   <td>✕</td>
-                  <td>✕</td>
+                  <td>自己可申请</td>
                   <td>看通知；硕士负责人需组织</td>
                   <td>默认显示；被登记参会后为已完成</td>
                 </tr>
@@ -776,7 +797,7 @@ function StudentProfile({ profile, onNavigate, refreshAll, requests, directionMo
                 <tr>
                   <td>硕士负责人</td>
                   <td>✕</td>
-                  <td>✕</td>
+                  <td>自己可申请</td>
                   <td>负责发起 / 组织</td>
                   <td>若同时是方向负责人，可登记完成</td>
                 </tr>
